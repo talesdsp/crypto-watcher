@@ -1,15 +1,30 @@
-const {app, BrowserWindow, Menu, shell} = require("electron");
+const {app, BrowserWindow, Menu, shell, ipcMain} = require("electron");
 const path = require("path");
 const url = require("url");
 
 let win;
 
+initApp();
+
+function initApp() {
+  app.on("ready", createWindow);
+  app.on("window-all-closed", allClosed);
+  app.on("activate", activate);
+  ipcMain.on("update-notify-value", updateNotifyValue);
+}
+
 function createWindow() {
-  win = new BrowserWindow({width: 800, height: 600});
+  win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
 
   win.loadURL(
     url.format({
-      pathname: path.join(__dirname, "src/index.html"),
+      pathname: path.join(__dirname, "src/home/home.html"),
       protocol: "file:",
       slashes: true
     })
@@ -49,14 +64,18 @@ function createWindow() {
   Menu.setApplicationMenu(menu);
 }
 
-app.on("ready", createWindow);
-app.on("window-all-closed", () => {
+function allClosed() {
   if (process.platform !== "darwin") {
     app.quit();
   }
-});
-app.on("activate", () => {
+}
+
+function activate() {
   if (win === null) {
     createWindow();
   }
-});
+}
+
+function updateNotifyValue(event, arg) {
+  win.webContents.send("targetPriceVal", arg);
+}
