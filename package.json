@@ -1,0 +1,9 @@
+{
+  "name": "crypto-app",
+  "version": "1.0.0",
+  "main": "app.js",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^8.0.2"
+  }
+}
