@@ -9,8 +9,8 @@ closeBtn.addEventListener("click", () => {
 
 const updateBtn = document.getElementById("update-btn");
 
-updateBtn.addListener("click", () => {
-  ipcRenderer.send("update-notify-value", document.getElementById("notify-val").value);
+updateBtn.addEventListener("click", () => {
+  ipcRenderer.send("update-notify-value", document.querySelector("#notify-val input").value);
 
   let window = remote.getCurrentWindow();
   window.close();
